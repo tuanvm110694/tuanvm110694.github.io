@@ -23,6 +23,14 @@ If you don't provide the parameter for lang and category, it will be automatical
 
 > \_post/undefined/undefined/mypost.md
 
+### List categories:
+
+1. japansese
+2. it
+3. digital-marketing
+4. life
+5. others
+
 _So, don't forget to give parameter for language and category :D_
 
 __More info__: https://hexo.io/docs/permalinks
