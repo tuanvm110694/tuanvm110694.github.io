@@ -8,7 +8,7 @@ tags: tips
 E.g: 
 
 ``` bash
-$ hexo new "mypost" --lang vi --category others
+$ hexo new "mypost" --category others
 ```
 So the url for that post will be like this:
 > mysite_url/:lang/:category/:year/:month/:day/:title/
