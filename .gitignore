@@ -1,3 +1,6 @@
 node_modules/
 .deploy_git/
 public/
+Thumbs.db
+db.json
+.DS_Store
