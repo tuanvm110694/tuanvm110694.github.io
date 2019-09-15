@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="1. –region=REGION để chỉ định Region cho Job DataflowKhi deploy 1 job lên dataflow, nếu không chỉ định region, nó sẽ được mặc định deploy lên region us-central1, tức là Instance chứa Job Dataflow của">
+<meta name="keywords" content="it,gcp,dataflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Một vài note khi sử dụng Cloud Dataflow">
+<meta property="og:url" content="https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/index.html">
+<meta property="og:site_name" content="tuanvm1106&#39;s blog">
+<meta property="og:description" content="1. –region=REGION để chỉ định Region cho Job DataflowKhi deploy 1 job lên dataflow, nếu không chỉ định region, nó sẽ được mặc định deploy lên region us-central1, tức là Instance chứa Job Dataflow của">
+<meta property="og:locale" content="vi">
+<meta property="og:updated_time" content="2019-09-15T19:32:00.147Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Một vài note khi sử dụng Cloud Dataflow">
+<meta name="twitter:description" content="1. –region=REGION để chỉ định Region cho Job DataflowKhi deploy 1 job lên dataflow, nếu không chỉ định region, nó sẽ được mặc định deploy lên region us-central1, tức là Instance chứa Job Dataflow của">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Một vài note khi sử dụng Cloud Dataflow</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Trang chủ</a></li>
+         
+          <li><a href="/about/">Giới thiệu</a></li>
+         
+          <li><a href="/archives/">Bài viết</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Bài trước</span>
+      <span id="i-next" class="info" style="display:none;">Bài tiếp theo</span>
+      <span id="i-top" class="info" style="display:none;">Về đầu trang</span>
+      <span id="i-share" class="info" style="display:none;">Chia sẻ bài viết</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/&text=Một vài note khi sử dụng Cloud Dataflow"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/&title=Một vài note khi sử dụng Cloud Dataflow"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/&is_video=false&description=Một vài note khi sử dụng Cloud Dataflow"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Một vài note khi sử dụng Cloud Dataflow&body=Check out this article: https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/&title=Một vài note khi sử dụng Cloud Dataflow"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/&title=Một vài note khi sử dụng Cloud Dataflow"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/&title=Một vài note khi sử dụng Cloud Dataflow"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/&title=Một vài note khi sử dụng Cloud Dataflow"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/&name=Một vài note khi sử dụng Cloud Dataflow&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-–region-REGION-de-chi-dinh-Region-cho-Job-Dataflow"><span class="toc-number">1.</span> <span class="toc-text">1. –region=REGION để chỉ định Region cho Job Dataflow</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Su-dung-cau-lenh-Gcloud-dataflow-de-cancel-job"><span class="toc-number">2.</span> <span class="toc-text">2. Sử dụng câu lệnh Gcloud dataflow để cancel job.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Hien-tai-khong-co-cach-nao-de-Delete-1-job-ma-chi-co-the-Cancel-no-di-thoi"><span class="toc-number">3.</span> <span class="toc-text">3. Hiện tại, không có cách nào để Delete 1 job, mà chỉ có thể Cancel nó đi thôi.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Ve-ban-chat-thi-Job-Dataflow-cung-duoc-deloy-va-chay-tren-nhung-VM-instance"><span class="toc-number">4.</span> <span class="toc-text">4. Về bản chất thì Job Dataflow cũng được deloy và chạy trên những VM instance.</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Một vài note khi sử dụng Cloud Dataflow
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">tuanvm1106's blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-15T19:05:35.000Z" itemprop="datePublished">2019-09-16</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/it/">it</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/dataflow/">dataflow</a>, <a class="tag-link" href="/tags/gcp/">gcp</a>, <a class="tag-link" href="/tags/it/">it</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="1-–region-REGION-de-chi-dinh-Region-cho-Job-Dataflow"><a href="#1-–region-REGION-de-chi-dinh-Region-cho-Job-Dataflow" class="headerlink" title="1. –region=REGION để chỉ định Region cho Job Dataflow"></a>1. –region=REGION để chỉ định Region cho Job Dataflow</h3><p>Khi deploy 1 job lên dataflow, nếu không chỉ định region, nó sẽ được <strong>mặc định</strong> deploy lên region us-central1, tức là Instance chứa Job Dataflow của bạn sẽ đặt ở 1 Data center nằm ở Mỹ. Điều này có thể không ảnh hưởng lắm, cho đến khi bạn cần xử lý lượng dữ liệu nhiều hơn, và trong xử lý có phát sinh các I/O với các service khác. </p>
+<p>Ví dụ, sau khi tính toán và xử lý dữ liệu xong, thì lưu kết quả vào MySQL.Trong khi xử lý dữ liệu thì cũng phải tham chiếu 1 số thông tin từ master trên MySQL. Instance của Job dataflow nằm ở us-central1 (Mỹ), còn instance của MySQL nằm ở asia-northeast1 (Tokyo). Điều này sẽ ảnh hưởng khá lớn đến hiệu năng của xử lý của bạn, vì việc truyền tải dữ liệu giữa Nhật và Mỹ chắc chắn sẽ không thể nhanh bằng Nhật - Nhật rồi . Đừng quên đặt các instance ở cùng region cho các xử lý có phát sinh I/O nhé. </p>
+<h3 id="2-Su-dung-cau-lenh-Gcloud-dataflow-de-cancel-job"><a href="#2-Su-dung-cau-lenh-Gcloud-dataflow-de-cancel-job" class="headerlink" title="2. Sử dụng câu lệnh Gcloud dataflow để cancel job."></a>2. Sử dụng câu lệnh Gcloud dataflow để cancel job.</h3><p>Trước hết, gõ cái này để lấy ra list job trong Project.</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcloud dataflow jobs list</span><br></pre></td></tr></table></figure>
+<p>Sau đó, bạn có thể dùng câu lệnh này để cancel 1 job Dataflow.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcloud dataflow jobs cancel JOB_ID --region REGION`</span><br></pre></td></tr></table></figure>
+<p>Lại 1 lần nữa có liên quan đến Region. Nếu không chỉ định parameter –region cho câu lệnh bên trên, thì Dataflow nó sẽ tự chỉ định region us-central1. Nếu job của chúng ta đang nằm ở asia-northeast1, thì câu lệnh trên sẽ không được thực hiện và sẽ có lỗi sau: </p>
+<blockquote>
+<p>Failed to cancel job [XXXYYYZZZ]: (4a2b1f4c989a438d): Could not cancel workflow; user does not have sufficient permissions on project: AAABBBCCC,or the job does not exist in the project. Please ensure you have permission to access the job and the <code>--region</code> flag, us-central1, matches the job’s region.</p>
+</blockquote>
+<h3 id="3-Hien-tai-khong-co-cach-nao-de-Delete-1-job-ma-chi-co-the-Cancel-no-di-thoi"><a href="#3-Hien-tai-khong-co-cach-nao-de-Delete-1-job-ma-chi-co-the-Cancel-no-di-thoi" class="headerlink" title="3. Hiện tại, không có cách nào để Delete 1 job, mà chỉ có thể Cancel nó đi thôi."></a>3. Hiện tại, không có cách nào để <strong>Delete</strong> 1 job, mà chỉ có thể <strong>Cancel</strong> nó đi thôi.</h3><p>Mình cũng search google xem có cách nào xoá hẳn 1 job khỏi List Jobs trên UI của Cloud Datafow không. Nhưng rất tiếc là không có cách nào cả.<br>Bạn chỉ có thể cancel 1 job nào đó, và job đó sẽ vẫn tồn tại trong list, với Status là <strong>Canceled</strong>. Nhìn cái list có nhiều Job deloy xong bị lỗi, phải cancel đi, mà không xoá được hẳn nó khỏi list, thật là ức chế …</p>
+<p>Nhận tiện thì cũng có khá nhiều người ức chế với việc này =))<br><a href="https://googlecloudplatform.uservoice.com/forums/302628-cloud-dataflow/suggestions/10099404-a-way-to-delete-old-runs-of-dataflow-jobs-search" target="_blank" rel="noopener">Here</a>. Cái issue này tồn tại 4 năm rồi, và phía Dataflow có vẻ không có ý định cho thêm tính năng này. </p>
+<h3 id="4-Ve-ban-chat-thi-Job-Dataflow-cung-duoc-deloy-va-chay-tren-nhung-VM-instance"><a href="#4-Ve-ban-chat-thi-Job-Dataflow-cung-duoc-deloy-va-chay-tren-nhung-VM-instance" class="headerlink" title="4. Về bản chất thì Job Dataflow cũng được deloy và chạy trên những VM instance."></a>4. Về bản chất thì Job Dataflow cũng được deloy và chạy trên những VM instance.</h3><p>Thế nên bạn hoàn toàn có thể vào mục <strong>Compute Engine</strong>, và sẽ thấy 1, hoặc nhiều con máy VM ở đó. Ở cột In use by sẽ có tên của Dataflow Job Name ABC, ý là con máy VM này đang được dùng bởi Dataflow Job ABC.</p>
+<p>Tuy nó là 1 VM, nhưng bạn không thể hẹn giờ bật tắt nó như những VM thông thường khác (để tiết kiệm chi phí những lúc không dùng đến chẳng hạn), nếu Dataflow Job type của bạn là Streaming.<br>Để đảm bảo cho việc nhận và xử lý dữ liệu mọi lúc mọi nơi, không thể stop instance chứa Job Dataflow được.<br>Instance trên GCE sẽ bị xoá hoàn toàn khi bạn thực hiện việc Cancel job. </p>
+<p>Ngoài ra, giống như thuộc tính của VM khác, khi deploy Job Dataflow, bạn hoàn toàn có thể chỉ định Network, Subnetwork cho nó.<br>Cho ai cần tham khảo chi tiết: <a href="https://cloud.google.com/dataflow/docs/guides/specifying-networks" target="_blank" rel="noopener">here</a></p>
+<p>Nếu không chỉ định gì, giống như những VM khác, nó sẽ tự động chui vào Network <strong>Default</strong>.<br>Có thể dùng 1 trong 2 cách dưới đây để chỉ định Subnetwork:</p>
+<ul>
+<li><p>Complete URL: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.googleapis.com/compute/v1/projects/&lt;HOST_PROJECT&gt;/regions/&lt;REGION&gt;/subnetworks/&lt;SUBNETWORK&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Short form:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">regions/&lt;REGION&gt;/subnetworks/&lt;SUBNETWORK&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>và thêm parameter: <code>--subnetwork=SUB_NETWORK</code><br>khi deploy job.</p>
+<p>Tạm thời thế đã, bài viết hôm nay xin phép dừng tại đây. Hi vọng chia sẻ này sẽ có chút hữu ích với bạn (nếu bạn là newbie và đang vọc vạch với Dataflow)</p>
+<p>Còn nếu bạn muốn biết chi tiết hơn, thì mọi thứ đều có ở <a href="https://cloud.google.com/dataflow/" target="_blank" rel="noopener">here</a>.</p>
+<p>See you.</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Vui lòng kích hoạt JavaScript để xem các bình luận.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Trang chủ</a></li>
+         
+          <li><a href="/about/">Giới thiệu</a></li>
+         
+          <li><a href="/archives/">Bài viết</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-–region-REGION-de-chi-dinh-Region-cho-Job-Dataflow"><span class="toc-number">1.</span> <span class="toc-text">1. –region=REGION để chỉ định Region cho Job Dataflow</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Su-dung-cau-lenh-Gcloud-dataflow-de-cancel-job"><span class="toc-number">2.</span> <span class="toc-text">2. Sử dụng câu lệnh Gcloud dataflow để cancel job.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Hien-tai-khong-co-cach-nao-de-Delete-1-job-ma-chi-co-the-Cancel-no-di-thoi"><span class="toc-number">3.</span> <span class="toc-text">3. Hiện tại, không có cách nào để Delete 1 job, mà chỉ có thể Cancel nó đi thôi.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Ve-ban-chat-thi-Job-Dataflow-cung-duoc-deloy-va-chay-tren-nhung-VM-instance"><span class="toc-number">4.</span> <span class="toc-text">4. Về bản chất thì Job Dataflow cũng được deloy và chạy trên những VM instance.</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/&text=Một vài note khi sử dụng Cloud Dataflow"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/&title=Một vài note khi sử dụng Cloud Dataflow"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/&is_video=false&description=Một vài note khi sử dụng Cloud Dataflow"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Một vài note khi sử dụng Cloud Dataflow&body=Check out this article: https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/&title=Một vài note khi sử dụng Cloud Dataflow"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/&title=Một vài note khi sử dụng Cloud Dataflow"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/&title=Một vài note khi sử dụng Cloud Dataflow"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/&title=Một vài note khi sử dụng Cloud Dataflow"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://tuanvm110694.github.io/vi/it/2019/09/16/some-tips-with-cloud-dataflow/&name=Một vài note khi sử dụng Cloud Dataflow&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Chia sẻ</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Về đầu trang</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Bản quyền &copy; 2019 Vu Manh Tuan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Trang chủ</a></li>
+         
+          <li><a href="/about/">Giới thiệu</a></li>
+         
+          <li><a href="/archives/">Bài viết</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'tuanvm110694s-blog';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+</body>
+</html>
