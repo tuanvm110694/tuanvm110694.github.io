@@ -15,7 +15,7 @@ timezone:
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: https://tuanvm110694.github.io/
 root: /
-permalink: :lang/:category/:year/:month/:day/:title/
+permalink: :lang/:year/:month/:day/:title/
 permalink_defaults:
 
 # Directory
@@ -29,7 +29,7 @@ i18n_dir: :lang
 skip_render:
 
 # Writing
-new_post_name: :lang/:category/:year-:month-:day/:title.md # File name of new posts
+new_post_name: :lang/:year-:month-:day/:title.md # File name of new posts
 default_layout: post
 titlecase: false # Transform title into titlecase
 external_link: true # Open external links in new tab
